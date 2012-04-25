@@ -43,9 +43,9 @@ var setupConnection = function(){
                     "information":[{"header":"Now Playing"}]
             };      
                  //socket.emit('updateInfo', "Now Playing:");
-        spThing.updateTrack = function(track){
+        spThing.updateTrack = function(){
             if(spThing.socket){
-                spThing.socket.emit('updateInfo', track);
+               updateEverymoteWithTrackDetails(spThing);
             }
         };
           spThing.handleAction = function(action){
@@ -65,6 +65,17 @@ var setupConnection = function(){
     return spThing;
 };
 
+var updateEverymoteWithTrackDetails = function(spThing){
+     var playerTrackInfo = player.track;
+        if (playerTrackInfo == null) {
+            spThing.updateTrack("Nothing playing!");
+        } else {
+            var track = playerTrackInfo.data;
+            spThing.socket.emit('updateInfo', track.name + " by " + track.album.artist.name);
+                
+        }
+}
+
 var next_song = function(){
 	player.next();
 }
@@ -82,12 +93,10 @@ var updatePageWithTrackDetails = function(spThing) {
         
         if (playerTrackInfo == null) {
         	header.innerText = "Nothing playing!";
-            spThing.updateTrack("Nothing playing!");
         } else {
         	var track = playerTrackInfo.data;
                 header.innerHTML = track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
-                spThing.updateTrack(track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".");
-        }
+      }
 
 
 }
@@ -95,7 +104,7 @@ var init = function() {
     var spThing = setupConnection();
     updatePageWithTrackDetails(spThing);
     
-     
+     setInterval(spThing.updateTrack,3000);
 
     player.observe(models.EVENT.CHANGE, function (e) {
 
