@@ -38,7 +38,7 @@ var setupConnection = function(){
                     "name":"Spotify",
                     "id":"28",
                     "quickAction":{"button":"Next"},
-                    "functions":  [{"button":"Play/Pause"},{"button":"Next"},{"button":"Previous"}],
+                    "functions":  [{"button":"Previous"},{"button":"Play/Pause"},{"button":"Next"}],
                     "iconType": "jukeBox",
                     "information":[{"header":"Now Playing"}]
             };      
@@ -71,7 +71,8 @@ var updateEverymoteWithTrackDetails = function(spThing){
             spThing.updateTrack("Nothing playing!");
         } else {
             var track = playerTrackInfo.data;
-            spThing.socket.emit('updateInfo', track.name + " by " + track.album.artist.name);
+	    var album = track.album;
+            spThing.socket.emit('updateInfo',"<img src='"+ album.cover +"'/>"  + track.name + " by " + track.album.artist.name);
                 
         }
 }
@@ -95,7 +96,7 @@ var updatePageWithTrackDetails = function(spThing) {
         	header.innerText = "Nothing playing!";
         } else {
         	var track = playerTrackInfo.data;
-                header.innerHTML = track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
+                header.innerHTML = "<img src='"+track.album.cover +"'/ > " +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
       }
 
 
