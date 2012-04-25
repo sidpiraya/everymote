@@ -4,6 +4,7 @@ var player = models.player;
 
 exports.init = init;
 exports.next = next_song;
+exports.previous = previous_song;
 function init() {
     updatePageWithTrackDetails();
 
@@ -20,7 +21,9 @@ function init() {
 function next_song(){
 	player.next();
 }
-
+function previous_song(){
+	player.previous();
+}
 function updatePageWithTrackDetails() {
 	var header = document.getElementById("header");
         var playerTrackInfo = player.track;
