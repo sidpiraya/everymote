@@ -18,6 +18,7 @@ var setupConnection = function(){
         socket.on('connect', function () {
                 console.log('connected');
                 socket.emit('setup', thing.settings);
+                thing.socket = socket;
         }).on('doAction', function (action) {
                 console.log(action);
                 thing.handleAction(action);
@@ -33,14 +34,20 @@ var setupConnection = function(){
 
     var build = function (spThing){
 
-         spThing.settings = { 
+        spThing.settings = { 
                     "name":"Spotify",
                     "id":"28",
                     "quickAction":{"button":"Next"},
                     "functions":  [{"button":"Next"},{"button":"Previous"}],
-                    "iconType": "jukeBox"
+                    "iconType": "jukeBox",
+                    "information":[{"header":"Now Playing"}]
             };      
-                 
+                 //socket.emit('updateInfo', "Now Playing:");
+        spThing.updateTrack = function(track){
+            if(spThing.socket){
+                spThing.socket.emit('updateInfo', track);
+            }
+        };
           spThing.handleAction = function(action){
             if(action === "Next"){
                 next_song();
@@ -53,7 +60,7 @@ var setupConnection = function(){
 
     var spThing = build({});
     connectThing(spThing);
-
+    return spThing;
 };
 
 var next_song = function(){
@@ -63,29 +70,36 @@ var previous_song = function(){
 	player.previous();
 }
 
-var updatePageWithTrackDetails = function() {
+var updatePageWithTrackDetails = function(spThing) {
 	var header = document.getElementById("header");
         var playerTrackInfo = player.track;
         
         if (playerTrackInfo == null) {
         	header.innerText = "Nothing playing!";
+            spThing.updateTrack("Nothing playing!");
         } else {
         	var track = playerTrackInfo.data;
                 header.innerHTML = track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
+                spThing.updateTrack(track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".");
         }
+
+
 }
 
 var init = function() {
-    updatePageWithTrackDetails();
+    var spThing = setupConnection();
+    updatePageWithTrackDetails(spThing);
+    
+
 
     player.observe(models.EVENT.CHANGE, function (e) {
 
     // Only update the page if the track changed
     if (e.data.curtrack == true) {
-            updatePageWithTrackDetails();
+            updatePageWithTrackDetails(spThing);
         }
     });
-    setupConnection();
+    
 
 }
 
