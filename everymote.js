@@ -37,7 +37,8 @@ var setupConnection = function(){
                     "name":"Spotify",
                     "id":"28",
                     "quickAction":{"button":"Next"},
-                    "functions":  [{"button":"Next"},{"button":"Previous"}]
+                    "functions":  [{"button":"Next"},{"button":"Previous"}],
+                    "iconType": "jukeBox"
             };      
                  
           spThing.handleAction = function(action){
