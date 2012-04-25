@@ -38,7 +38,7 @@ var setupConnection = function(){
                     "name":"Spotify",
                     "id":"28",
                     "quickAction":{"button":"Next"},
-                    "functions":  [{"button":"Next"},{"button":"Previous"}],
+                    "functions":  [{"button":"Play/Pause"},{"button":"Next"},{"button":"Previous"}],
                     "iconType": "jukeBox",
                     "information":[{"header":"Now Playing"}]
             };      
@@ -53,6 +53,8 @@ var setupConnection = function(){
                 next_song();
             }else if(action === "Previous"){
                 previous_song();
+            }else if(action === "Play/Pause"){
+                playPause_song();
             }
           };
        return spThing;
@@ -67,7 +69,11 @@ var next_song = function(){
 	player.next();
 }
 var previous_song = function(){
-	player.previous();
+	player.previous(true);
+}
+
+var playPause_song = function(){
+    player.playing = !player.playing;
 }
 
 var updatePageWithTrackDetails = function(spThing) {
@@ -85,12 +91,11 @@ var updatePageWithTrackDetails = function(spThing) {
 
 
 }
-
 var init = function() {
     var spThing = setupConnection();
     updatePageWithTrackDetails(spThing);
     
-
+     
 
     player.observe(models.EVENT.CHANGE, function (e) {
 
