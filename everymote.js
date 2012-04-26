@@ -72,7 +72,7 @@ var updateEverymoteWithTrackDetails = function(spThing){
         } else {
             var track = playerTrackInfo.data;
 	    var album = track.album;
-            spThing.socket.emit('updateInfo',"<img src='"+ album.cover +"'/>"  + track.name + " by " + track.album.artist.name);
+            spThing.socket.emit('updateInfo', track.name + " by " + track.album.artist.name);
                 
         }
 }
