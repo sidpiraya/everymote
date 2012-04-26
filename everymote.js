@@ -37,7 +37,6 @@ var setupConnection = function(){
         spThing.settings = { 
                     "name":"Spotify",
                     "id":"28",
-                    "quickAction":{"button":"Next"},
                     "functions":  [{"button":"Previous"},{"button":"Play/Pause"},{"button":"Next"}],
                     "iconType": "jukeBox",
                     "information":[{"header":"Now Playing"}]
