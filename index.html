@@ -4,8 +4,46 @@
     <meta charset="utf-8">
     <title>Everymote</title>
     <link rel="stylesheet" href="sp://import/css/adam.css">
+    <style>
+            @import url('sp://import/css/eve.css');
+            @import url('sp://import/css/player.css');
+            @import url('sp://import/css/ui.css');
+            h1, ul {margin:0 0 30px;}
+            a:hover {color:#83be20;}
+        </style>
     <script src="http://thing.everymote.com/socket.io/socket.io.js"></script>
+    <script src="sp://everymote/js/jquery-1.7.min.js"></script>
+
+    <script>
+            
+
+            $(document).ready(function() {
+                var sp = getSpotifyApi(1);
+                var models = sp.require('sp://import/scripts/api/models');
+                var everymote = sp.require('everymote');
+
+                var tabs = function() {
+                    var args = models.application.arguments;
+                    console.log(args[0]);
+                    $('.section').hide();
+                    $('#'+args[0]).show();
+                };
+
+               
+                everymote.init();
+
+                tabs();
+                models.application.observe(models.EVENT.ARGUMENTSCHANGED, tabs);
+    
+            });
+        </script>
 </head>
-<body onload="sp = getSpotifyApi(1); everymote = sp.require('everymote'); everymote.init();">
-<h1 id="header">Hello, world!</h1>
+<body>
+    <div id="index" class="section">
+        <h1 id="header">Hello, world!</h1>
+    </div>
+    <div id="settings" class="section">
+        <h1>Settings</h1>
+    </div>
+</body>
 </html>

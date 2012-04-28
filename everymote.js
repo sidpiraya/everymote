@@ -41,7 +41,6 @@ var setupConnection = function(){
                     "iconType": "jukeBox",
                     "information":[{"header":"Now Playing"}]
             };      
-                 //socket.emit('updateInfo', "Now Playing:");
         spThing.updateTrack = function(){
             if(spThing.socket){
                updateEverymoteWithTrackDetails(spThing);
@@ -49,11 +48,16 @@ var setupConnection = function(){
         };
           spThing.handleAction = function(action){
             if(action === "Next"){
-                next_song();
+                if(canPlayNext()){
+                    next_song();
+                }
             }else if(action === "Previous"){
-                previous_song();
+                if(canPlayPrevious()){
+                   previous_song(); 
+                } 
             }else if(action === "Play/Pause"){
                 playPause_song();
+                
             }
           };
        return spThing;
@@ -65,15 +69,25 @@ var setupConnection = function(){
 };
 
 var updateEverymoteWithTrackDetails = function(spThing){
+
      var playerTrackInfo = player.track;
-        if (playerTrackInfo == null) {
+
+        if (playerTrackInfo === null) {
             spThing.updateTrack("Nothing playing!");
         } else {
             var track = playerTrackInfo.data;
-	    var album = track.album;
+	        var album = track.album;
             spThing.socket.emit('updateInfo', track.name + " by " + track.album.artist.name);
                 
         }
+}
+
+var canPlayNext = function(){
+    return player.canPlayNext;
+}
+
+var canPlayPrevious = function(){
+    return player.canPlayPrevious;
 }
 
 var next_song = function(){
@@ -87,7 +101,7 @@ var playPause_song = function(){
     player.playing = !player.playing;
 }
 
-var updatePageWithTrackDetails = function(spThing) {
+var updatePageWithTrackDetails = function() {
 	var header = document.getElementById("header");
         var playerTrackInfo = player.track;
         
@@ -103,15 +117,14 @@ var updatePageWithTrackDetails = function(spThing) {
 var init = function() {
     var spThing = setupConnection();
     updatePageWithTrackDetails(spThing);
-    
-     setInterval(spThing.updateTrack,3000);
-
+   
     player.observe(models.EVENT.CHANGE, function (e) {
 
-    // Only update the page if the track changed
-    if (e.data.curtrack == true) {
-            updatePageWithTrackDetails(spThing);
-        }
+        // Only update the page if the track changed
+        if (e.data.curtrack == true) {
+                updatePageWithTrackDetails();
+                spThing.updateTrack();
+            }
     });
     
 

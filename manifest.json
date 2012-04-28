@@ -11,5 +11,19 @@
     ],
     "RequiredPermissions": [
         "http://thing.everymote.com"
+    ],
+    "DefaultTabs": [
+        {
+            "arguments": "index",
+            "title": {
+                "en": "Home"
+            }
+        },
+        {
+            "arguments": "settings",
+            "title": {
+                "en": "Settings"
+            }
+        }
     ]
 }
