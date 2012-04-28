@@ -40,7 +40,7 @@ var setupConnection = function(){
                     "id":"28",
                     "functions":  [{"button":"Previous"},{"button":"Play/Pause"},{"button":"Next"}],
                     "iconType": "jukeBox",
-                    "information":[{"header":"Now Playing"}]
+                    "info":getTrackInfo()
             };      
         spThing.updateTrack = function(){
             if(spThing.socket){
@@ -69,18 +69,19 @@ var setupConnection = function(){
     return spThing;
 };
 
+var getTrackInfo = function(){
+    var playerTrackInfo = player.track;
+    if (playerTrackInfo === null) {
+       return "Nothing playing!";
+    } else {
+        var track = playerTrackInfo.data;
+        var album = track.album;
+        return track.name + " by " + track.album.artist.name;         
+    }
+}
+
 var updateEverymoteWithTrackDetails = function(spThing){
-
-     var playerTrackInfo = player.track;
-
-        if (playerTrackInfo === null) {
-            spThing.updateTrack("Nothing playing!");
-        } else {
-            var track = playerTrackInfo.data;
-	        var album = track.album;
-            spThing.socket.emit('updateInfo', track.name + " by " + track.album.artist.name);
-                
-        }
+    spThing.socket.emit('updateInfo',getTrackInfo());
 }
 
 var canPlayNext = function(){
