@@ -1,6 +1,7 @@
-var sp = getSpotifyApi(1);
-var models = sp.require('sp://import/scripts/api/models');
-var player = models.player;
+//var sp = getSpotifyApi(1);
+//var models = sp.require('sp://import/scripts/api/models');
+var player;// = models.player;
+var spThing;
 
 var setupConnection = function(){
     var server = 'thing.everymote.com',
@@ -35,7 +36,7 @@ var setupConnection = function(){
     var build = function (spThing){
 
         spThing.settings = { 
-                    "name":"Spotify",
+                    "name":"Spotify " +localStorage.getItem("name"),
                     "id":"28",
                     "functions":  [{"button":"Previous"},{"button":"Play/Pause"},{"button":"Next"}],
                     "iconType": "jukeBox",
@@ -114,8 +115,20 @@ var updatePageWithTrackDetails = function() {
 
 
 }
-var init = function() {
-    var spThing = setupConnection();
+
+var setUpPlayQueue = function(){
+
+}
+
+var updateName = function(){
+    spThing.settings.name="Spotify " +localStorage.getItem("name");
+    spThing.socket.emit('setup', spThing.settings);
+}
+
+
+var init = function(models) {
+    player = models.player;
+    spThing = setupConnection();
     updatePageWithTrackDetails(spThing);
    
     player.observe(models.EVENT.CHANGE, function (e) {
@@ -133,5 +146,5 @@ var init = function() {
 exports.init = init;
 exports.next = next_song;
 exports.previous = previous_song;
-
+exports.updateName = updateName;
 

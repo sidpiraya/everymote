@@ -5,7 +5,8 @@
     <title>Everymote</title>
     <link rel="stylesheet" href="sp://import/css/adam.css">
     <style>
-            @import url('sp://import/css/eve.css');
+           
+            @import url('sp://import/css/list.css');
             @import url('sp://import/css/player.css');
             @import url('sp://import/css/ui.css');
             h1, ul {margin:0 0 30px;}
@@ -15,35 +16,63 @@
     <script src="sp://everymote/js/jquery-1.7.min.js"></script>
 
     <script>
-            
+
+
 
             $(document).ready(function() {
                 var sp = getSpotifyApi(1);
                 var models = sp.require('sp://import/scripts/api/models');
                 var everymote = sp.require('everymote');
-
+                var views = sp.require("sp://import/scripts/api/views");
+                
                 var tabs = function() {
                     var args = models.application.arguments;
                     console.log(args[0]);
                     $('.section').hide();
                     $('#'+args[0]).show();
                 };
-
                
-                everymote.init();
-
+ 
                 tabs();
                 models.application.observe(models.EVENT.ARGUMENTSCHANGED, tabs);
-    
+
+                everymote.init(models);
+
+               
+                var tracks = models.library.starredPlaylist;
+
+                console.log(models.session.anonymousUserID);
+                /* Create a temporary playlist and fill it with tracks
+                 * from the previous query */
+                var tempPlaylist = new models.Playlist();
+                for(var i=0;i<tracks.length;i++) {
+                    var track = tracks.get(i);
+                    tempPlaylist.add(track);
+                }
+
+                /* Create a "view" for the playlist and pass the list
+                 * code to the #player <div /> */
+                var playlist = new views.List(tempPlaylist);
+            
+                $('#player').append(playlist.node);
+
+                $("#name").focusout( function() {
+                    localStorage.setItem('name', $(this).val());
+                    everymote.updateName();
+                });
+
+                $("#name").val(localStorage.getItem("name"));
             });
         </script>
 </head>
 <body>
     <div id="index" class="section">
         <h1 id="header">Hello, world!</h1>
+        <div id="player"></div>
     </div>
     <div id="settings" class="section">
         <h1>Settings</h1>
+        <label>Name:</label> <input type="text" id="name"></input>
     </div>
 </body>
 </html>
