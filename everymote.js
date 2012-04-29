@@ -130,16 +130,34 @@ var updateName = function(){
 }
 
 
+
+
 var handleLinks = function () {
-    var links = _models.application.links;
+    var urlLinks = _models.application.links;
+   
+    var links =  urlLinks.map(function(url){return new _models.Link(url);});
+     console.log(links);
     if(links.length) {
-        switch(links[0].split(":")[1]) {
+        switch(links[0].type) {
             case "user":
                 //socialInput(links[0].split(":")[2]);
                 break;
+            case 4:
+                _playlist.add(links[0]);
+                //socialInput(links[0].split(":")[2]);
+                break;
+            case 5:
+                _models.Playlist.fromURI(links[0], function(playlistFromURI) {
+                                console.log("Playlist loaded", playlistFromURI.name);
+                                 for (var i =  0; i < playlistFromURI.tracks.length; i++) {
+                                     _playlist.add(playlistFromURI.tracks[i]);
+                                 };
+                            });
+                break;
+
             default:
                 // Play the given item
-                _playlist.add(_models.Track.fromURI(links[0]));
+                
                 //player.play(models.Track.fromURI(links[0]));
                 break;
         }       
@@ -149,13 +167,14 @@ var handleLinks = function () {
 
 var init = function(models, playlist) {
     _models = models;
+      console.log(_models.Link);
     player = models.player;
     spThing = setupConnection();
     _playlist = playlist;
     updatePageWithTrackDetails(spThing);
-   
-    player.observe(models.EVENT.CHANGE, function (e) {
     models.application.observe(models.EVENT.LINKSCHANGED, handleLinks);
+    player.observe(models.EVENT.CHANGE, function (e) {
+    
 
         // Only update the page if the track changed
         if (e.data.curtrack == true) {
