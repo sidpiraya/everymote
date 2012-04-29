@@ -42,7 +42,7 @@ var setupConnection = function(){
                     "name":"Spotify " +localStorage.getItem("name"),
                     "id":"28",
                     "functions":  [{"button":"Previous"},{"button":"Play/Pause"},{"button":"Next"}],
-                    "iconType": "jukeBox",
+                    "iconType": "spotifyL",
                     "info":getTrackInfo()
             };      
         spThing.updateTrack = function(){
