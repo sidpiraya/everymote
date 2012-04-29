@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Everymote</title>
     <link rel="stylesheet" href="sp://import/css/adam.css">
+    <link rel="stylesheet" href="sp://import/css/api.css">
     <style>
            
             @import url('sp://import/css/list.css');
@@ -24,7 +25,8 @@
                 var models = sp.require('sp://import/scripts/api/models');
                 var everymote = sp.require('everymote');
                 var views = sp.require("sp://import/scripts/api/views");
-                
+                var tempPlaylist = new models.Playlist();
+
                 var tabs = function() {
                     var args = models.application.arguments;
                     console.log(args[0]);
@@ -36,22 +38,32 @@
                 tabs();
                 models.application.observe(models.EVENT.ARGUMENTSCHANGED, tabs);
 
-                everymote.init(models);
+                everymote.init(models, tempPlaylist);
 
                
-                var tracks = models.library.starredPlaylist;
+                var tracks = models.library.tracks;
+               // var track = tracks[Math.floor(Math.random()*tracks.length)]
+                //clearPlaylist(tempPlaylist);
+                //tempPlaylist.add(track.data.uri);
+                //player.play(track.data.uri, tempPlaylist.data.uri, 0);
+                //e.preventDefault();
+
+                //var tracks = models.library.starredPlaylist;
 
                 console.log(models.session.anonymousUserID);
                 /* Create a temporary playlist and fill it with tracks
                  * from the previous query */
-                var tempPlaylist = new models.Playlist();
-                for(var i=0;i<tracks.length;i++) {
-                    var track = tracks.get(i);
-                    tempPlaylist.add(track);
+                
+                for(var i=0;i<10;i++) {
+                    
+                    tempPlaylist.add(tracks[Math.floor(Math.random()*tracks.length)]);
                 }
 
-                /* Create a "view" for the playlist and pass the list
-                 * code to the #player <div /> */
+
+                models.player.play(tempPlaylist.get(0), tempPlaylist, 0);
+
+
+
                 var playlist = new views.List(tempPlaylist);
             
                 $('#player').append(playlist.node);

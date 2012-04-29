@@ -2,17 +2,24 @@
     "BundleType": "Application",
     "AppIcon": {
         "36x18": "everymote.png"
-    },
-    "AppName": {
+        }
+    ,"AppName": {
         "en": "everymote"
-    },
-    "SupportedLanguages": [
+        }
+    ,"AcceptedLinkTypes":[
+        "album",
+        "artist",
+        "track",
+        "playlist",
+        "user"
+        ]
+    ,"SupportedLanguages": [
         "en"
-    ],
-    "RequiredPermissions": [
+        ]
+    ,"RequiredPermissions": [
         "http://thing.everymote.com"
-    ],
-    "DefaultTabs": [
+        ]
+    ,"DefaultTabs": [
         {
             "arguments": "index",
             "title": {
@@ -25,5 +32,5 @@
                 "en": "Settings"
             }
         }
-    ]
+        ]
 }

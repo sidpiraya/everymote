@@ -1,7 +1,10 @@
+"use strict";
 //var sp = getSpotifyApi(1);
 //var models = sp.require('sp://import/scripts/api/models');
 var player;// = models.player;
 var spThing;
+var _playlist,
+    _models;
 
 var setupConnection = function(){
     var server = 'thing.everymote.com',
@@ -127,12 +130,32 @@ var updateName = function(){
 }
 
 
-var init = function(models) {
+var handleLinks = function () {
+    var links = _models.application.links;
+    if(links.length) {
+        switch(links[0].split(":")[1]) {
+            case "user":
+                //socialInput(links[0].split(":")[2]);
+                break;
+            default:
+                // Play the given item
+                _playlist.add(_models.Track.fromURI(links[0]));
+                //player.play(models.Track.fromURI(links[0]));
+                break;
+        }       
+    } 
+}
+
+
+var init = function(models, playlist) {
+    _models = models;
     player = models.player;
     spThing = setupConnection();
+    _playlist = playlist;
     updatePageWithTrackDetails(spThing);
    
     player.observe(models.EVENT.CHANGE, function (e) {
+    models.application.observe(models.EVENT.LINKSCHANGED, handleLinks);
 
         // Only update the page if the track changed
         if (e.data.curtrack == true) {
