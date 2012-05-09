@@ -21,7 +21,8 @@
 
 
             $(document).ready(function() {
-                var sp = getSpotifyApi(1);
+                sp = getSpotifyApi(1);
+                console.log(sp);
                 var models = sp.require('sp://import/scripts/api/models');
                 var everymote = sp.require('everymote');
                 var views = sp.require("sp://import/scripts/api/views");

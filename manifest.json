@@ -1,6 +1,11 @@
 {
-    "BundleType": "Application",
-    "AppIcon": {
+    "AppDescription": {
+        "en": "Everymote plugin"
+    }
+    ,"BundleIdentifier": "everymote"
+    ,"BundleType": "Application",
+    "BundleVersion": "0.1"
+    ,"AppIcon": {
         "36x18": "everymote.png"
         }
     ,"AppName": {
@@ -17,7 +22,7 @@
         "en"
         ]
     ,"RequiredPermissions": [
-        "http://thing.everymote.com"
+        "http://thing.everymote.com","http://*"
         ]
     ,"DefaultTabs": [
         {
@@ -33,4 +38,5 @@
             }
         }
         ]
+    ,"VendorIdentifier": "com.everymote"
 }

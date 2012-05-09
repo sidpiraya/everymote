@@ -8,7 +8,7 @@ var _playlist,
 
 var setupConnection = function(){
     var server = 'thing.everymote.com',
-    port = '80';
+    port = '1338';
 
     var connectThing = function(thing){
         console.log(thing);
@@ -24,7 +24,7 @@ var setupConnection = function(){
                 socket.emit('setup', thing.settings);
                 thing.socket = socket;
         }).on('doAction', function (action) {
-                console.log(action);
+                console.log(action.id);
                 thing.handleAction(action);
         }).on('connect_failed', function () {
                 console.log('error:' + socket );
@@ -41,8 +41,11 @@ var setupConnection = function(){
         spThing.settings = { 
                     "name":"Spotify " +localStorage.getItem("name"),
                     "id":"28",
-                    "functions":  [{"button":"Previous"},{"button":"Play/Pause"},{"button":"Next"}],
-                    "iconType": "spotifyL",
+                    "actionControles":[
+                                    {"type":"button", "name":"Previous", "id":"1"}
+                                    ,{"type":"playPausButton", "name":"Play/Pause", "id":"2", "curentState":isPlaying()}
+                                    ,{"type":"button", "name":"Next", "id":"3"}]
+                    ,"iconType": "spotifyL",
                     "info":getTrackInfo()
             };      
         spThing.updateTrack = function(){
@@ -50,17 +53,22 @@ var setupConnection = function(){
                updateEverymoteWithTrackDetails(spThing);
             }
         };
+        spThing.updatePlayStatus = function(){
+            if(spThing.socket){
+               updateEverymoteWithPlayStatus(spThing);
+            }
+        };
           spThing.handleAction = function(action){
-            if(action === "Next"){
+            if(action.id === "3"){
                 if(canPlayNext()){
                     next_song();
                 }
-            }else if(action === "Previous"){
+            }else if(action.id === "1"){
                 if(canPlayPrevious()){
                    previous_song(); 
                 } 
-            }else if(action === "Play/Pause"){
-                playPause_song();
+            }else if(action.id === "2"){
+                playTrack(action.value);
                 
             }
           };
@@ -87,6 +95,11 @@ var updateEverymoteWithTrackDetails = function(spThing){
     spThing.socket.emit('updateInfo',getTrackInfo());
 }
 
+var updateEverymoteWithPlayStatus = function(spThing){
+    spThing.socket.emit('updateActionControlerState', {"id":"2", "curentState":isPlaying()});
+}
+
+
 var canPlayNext = function(){
     return player.canPlayNext;
 }
@@ -102,9 +115,19 @@ var previous_song = function(){
 	player.previous(true);
 }
 
-var playPause_song = function(){
-    player.playing = !player.playing;
+var playTrack = function(play){
+    player.playing = play;
 }
+
+var setVolume = function(v){
+    console.log(player);
+    player.volume = v;
+}
+
+var isPlaying = function(){
+    return player.playing;
+}
+
 
 var updatePageWithTrackDetails = function() {
 	var header = document.getElementById("header");
@@ -174,13 +197,14 @@ var init = function(models, playlist) {
     updatePageWithTrackDetails(spThing);
     models.application.observe(models.EVENT.LINKSCHANGED, handleLinks);
     player.observe(models.EVENT.CHANGE, function (e) {
-    
-
-        // Only update the page if the track changed
-        if (e.data.curtrack == true) {
+        console.log(e);
+        if (e.data.curtrack) {
                 updatePageWithTrackDetails();
                 spThing.updateTrack();
             }
+        if (e.data.playstate) {
+            spThing.updatePlayStatus();
+        }
     });
     
 
