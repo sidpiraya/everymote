@@ -8,7 +8,7 @@ var _playlist,
 
 var setupConnection = function(){
     var server = 'thing.everymote.com',
-    port = '1338';
+    port = '80';
 
     var connectThing = function(thing){
         console.log(thing);
@@ -42,9 +42,9 @@ var setupConnection = function(){
                     "name":"Spotify " +localStorage.getItem("name"),
                     "id":"28",
                     "actionControles":[
-                                    {"type":"button", "name":"Previous", "id":"1"}
-                                    ,{"type":"playPausButton", "name":"Play/Pause", "id":"2", "curentState":isPlaying()}
-                                    ,{"type":"button", "name":"Next", "id":"3"}]
+                                    {"type":"button", "name":"<<", "id":"1"}
+                                    ,{"type":"playPauseButton", "name":"Play/Pause", "id":"2", "curentState":isPlaying()}
+                                    ,{"type":"button", "name":">>", "id":"3"}]
                     ,"iconType": "spotifyL",
                     "info":getTrackInfo()
             };      
