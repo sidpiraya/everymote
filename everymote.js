@@ -134,6 +134,12 @@ var updatePageWithTrackDetails = function() {
 
 }
 
+var removeLastPlayed = function(priviusTrack){
+    if(priviusTrack){
+        _playlist.remove(priviusTrack);
+    }
+    
+}
 var setUpPlayQueue = function(){
 
 }
@@ -180,9 +186,11 @@ var handleLinks = function () {
 
 
 var init = function(models, playlist) {
+    var priviusTrack; 
     _models = models;
       console.log(_models.Link);
     player = models.player;
+    var myPlayer = models.player;
     spThing = setupConnection();
     _playlist = playlist;
     updatePageWithTrackDetails(spThing);
@@ -190,13 +198,18 @@ var init = function(models, playlist) {
     player.observe(models.EVENT.CHANGE, function (e) {
         console.log(e);
         if (e.data.curtrack) {
+
                 updatePageWithTrackDetails();
                 spThing.updateTrack();
+                removeLastPlayed(priviusTrack);
+                priviusTrack = myPlayer.track;
+                
             }
         if (e.data.playstate) {
             spThing.updatePlayStatus();
         }
     });
+
     
 
 }
