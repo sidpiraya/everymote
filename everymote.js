@@ -43,6 +43,8 @@ var setupConnection = function(){
                 socket.emit('setup', thing.settings);
                 thing.socket = socket;
                 updateEverymoteWithTrackDetails(spThing);
+                getPlayList(function(tracks){console.log("first GetPlayLis"); console.dir(tracks);spThing.socket.emit('updateActionControlerState', {"id":"2", "curentState":tracks});});
+
         }).on('doAction', function (action) {
                 console.log(action.id);
                 thing.handleAction(action);
@@ -230,7 +232,7 @@ var init = function(models, playlist) {
         updateEverymoteWithPlayList(spThing);
     });
    // spThing.updateTrack();
-    updateEverymoteWithPlayList(spThing);
+    //updateEverymoteWithPlayList(spThing);
     
 
 }
