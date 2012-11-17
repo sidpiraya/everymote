@@ -190,7 +190,6 @@ var init = function(models, playlist) {
     _models = models;
       console.log(_models.Link);
     player = models.player;
-    var myPlayer = models.player;
     spThing = setupConnection();
     _playlist = playlist;
     updatePageWithTrackDetails(spThing);
@@ -202,7 +201,7 @@ var init = function(models, playlist) {
                 updatePageWithTrackDetails();
                 spThing.updateTrack();
                 removeLastPlayed(priviusTrack);
-                priviusTrack = myPlayer.track;
+                priviusTrack = player.track;
                 
             }
         if (e.data.playstate) {
