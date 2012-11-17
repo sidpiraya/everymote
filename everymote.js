@@ -7,8 +7,8 @@ var _playlist,
     _models;
 
 var setupConnection = function(){
-    var server = 'thing.everymote.com',
-    port = '80';
+    var server = "localhost", // 'thing.everymote.com',
+    port = '1338'; //'80';
 
     var connectThing = function(thing){
         console.log(thing);
@@ -42,9 +42,7 @@ var setupConnection = function(){
                     "name":"Spotify " +localStorage.getItem("name"),
                     "id":"28",
                     "actionControles":[
-                                    {"type":"button", "name":"<<", "id":"1"}
-                                    ,{"type":"playPauseButton", "name":"Play/Pause", "id":"2", "curentState":isPlaying()}
-                                    ,{"type":"button", "name":">>", "id":"3"}]
+                                    {"type":"spotify-search", "name":"search", "id":"1"}]
                     ,"iconType": "spotifyL",
                     "info":getTrackInfo()
             };      
@@ -59,16 +57,9 @@ var setupConnection = function(){
             }
         };
           spThing.handleAction = function(action){
-            if(action.id === "3"){
-                if(canPlayNext()){
-                    next_song();
-                }
-            }else if(action.id === "1"){
-                if(canPlayPrevious()){
-                   previous_song(); 
-                } 
-            }else if(action.id === "2"){
-                playTrack(action.value);
+            if(action.id === "1"){
+                console.log(action);
+                _playlist.add(action.value);
                 
             }
           };
