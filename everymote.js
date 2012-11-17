@@ -1,10 +1,26 @@
 "use strict";
+var m = sp.require("sp://import/scripts/api/models");
 //var sp = getSpotifyApi(1);
 //var models = sp.require('sp://import/scripts/api/models');
 var player;// = models.player;
 var spThing;
 var _playlist,
     _models;
+
+var getPlayList = function(calback){
+    var nrOfTracks = _playlist.data.all().length;
+    var tracks = [];
+
+    _playlist.data.all().forEach(function(trackURI, index){
+        m.Track.fromURI(trackURI, function(track){
+            tracks.push(track.name);
+            if(tracks.length === nrOfTracks){calback(tracks);};
+        });
+    });
+    
+
+    
+};
 
 var setupConnection = function(){
     var server = "localhost", // 'thing.everymote.com',
@@ -42,7 +58,8 @@ var setupConnection = function(){
                     "name":"Spotify " +localStorage.getItem("name"),
                     "id":"28",
                     "actionControles":[
-                                    {"type":"spotify-search", "name":"search", "id":"1"}]
+                                    {"type":"spotify-search", "name":"search", "id":"1"}
+                                    ,{"type":"list", "name":"list", "id":"2", "curentState":""}]
                     ,"iconType": "spotifyL",
                     "info":getTrackInfo()
             };      
@@ -86,8 +103,9 @@ var updateEverymoteWithTrackDetails = function(spThing){
     spThing.socket.emit('updateInfo',getTrackInfo());
 }
 
-var updateEverymoteWithPlayStatus = function(spThing){
-    spThing.socket.emit('updateActionControlerState', {"id":"2", "curentState":isPlaying()});
+var updateEverymoteWithPlayList = function(spThing){
+    getPlayList(function(tracks){spThing.socket.emit('updateActionControlerState', {"id":"2", "curentState":tracks});});
+    
 }
 
 
@@ -201,14 +219,20 @@ var init = function(models, playlist) {
                 updatePageWithTrackDetails();
                 spThing.updateTrack();
                 removeLastPlayed(priviusTrack);
+                updateEverymoteWithPlayList(spThing);
                 priviusTrack = player.track;
                 
             }
-        if (e.data.playstate) {
+        else if (e.data.playstate) {
             spThing.updatePlayStatus();
         }
-    });
 
+    });
+    _playlist.observe(models.EVENT.ITEMS_ADDED, function (e) {
+        updateEverymoteWithPlayList(spThing);
+    });
+    spThing.updateTrack();
+    updateEverymoteWithPlayList(spThing);
     
 
 }
