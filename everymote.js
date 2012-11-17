@@ -23,7 +23,7 @@ var getPlayList = function(calback){
 };
 
 var setupConnection = function(){
-    if(true){
+    if(false){
     var server = 'thing.everymote.com',
     port = '80';
     }else{
