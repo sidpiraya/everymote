@@ -17,18 +17,15 @@ var getPlayList = function(calback){
             if(tracks.length === nrOfTracks){calback(tracks);};
         });
     });
-    
-
-    
 };
 
 var setupConnection = function(){
     if(true){
-    var server = 'thing.everymote.com',
-    port = '80';
+        var server = 'thing.everymote.com',
+        port = '80';
     }else{
-    var server = "localhost", 
-    port = '1338'; 
+        var server = "localhost", 
+        port = '1338'; 
     }
 
     var connectThing = function(thing){
@@ -114,7 +111,6 @@ var updateEverymoteWithPlayList = function(spThing){
     
 }
 
-
 var canPlayNext = function(){
     return player.canPlayNext;
 }
@@ -173,9 +169,6 @@ var updateName = function(){
     spThing.socket.emit('setup', spThing.settings);
 }
 
-
-
-
 var handleLinks = function () {
     var urlLinks = _models.application.links;
    
@@ -221,16 +214,13 @@ var init = function(models, playlist) {
     player.observe(models.EVENT.CHANGE, function (e) {
         console.log(e);
         if (e.data.curtrack) {
-console.log("curtrack");
                 updatePageWithTrackDetails();
                 spThing.updateTrack();
                 removeLastPlayed(priviusTrack);
                 updateEverymoteWithPlayList(spThing);
                 priviusTrack = player.track;
-                
             }
         else if (e.data.playstate) {
-            console.log("playstate update YALLA");
             spThing.updatePlayStatus();
         }
 
