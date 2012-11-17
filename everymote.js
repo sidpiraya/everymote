@@ -13,7 +13,7 @@ var getPlayList = function(calback){
 
     _playlist.data.all().forEach(function(trackURI, index){
         m.Track.fromURI(trackURI, function(track){
-            tracks.push(track.name);
+            tracks.push(track.name.decodeForText());
             if(tracks.length === nrOfTracks){calback(tracks);};
         });
     });
