@@ -44,6 +44,7 @@ var setupConnection = function(){
                 console.log('connected');
                 socket.emit('setup', thing.settings);
                 thing.socket = socket;
+                updateEverymoteWithTrackDetails(spThing);
         }).on('doAction', function (action) {
                 console.log(action.id);
                 thing.handleAction(action);
@@ -151,7 +152,7 @@ var updatePageWithTrackDetails = function() {
         	header.innerText = "Nothing playing!";
         } else {
         	var track = playerTrackInfo.data;
-                header.innerHTML = "<img src='"+track.album.cover +"'/ > " +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
+                header.innerHTML = "<img src='"+track.album.cover +"' width='300'/ > " +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
       }
 
 
@@ -220,7 +221,7 @@ var init = function(models, playlist) {
     player.observe(models.EVENT.CHANGE, function (e) {
         console.log(e);
         if (e.data.curtrack) {
-
+console.log("curtrack");
                 updatePageWithTrackDetails();
                 spThing.updateTrack();
                 removeLastPlayed(priviusTrack);
@@ -229,6 +230,7 @@ var init = function(models, playlist) {
                 
             }
         else if (e.data.playstate) {
+            console.log("playstate update YALLA");
             spThing.updatePlayStatus();
         }
 
@@ -236,7 +238,7 @@ var init = function(models, playlist) {
     _playlist.observe(models.EVENT.ITEMS_ADDED, function (e) {
         updateEverymoteWithPlayList(spThing);
     });
-    spThing.updateTrack();
+   // spThing.updateTrack();
     updateEverymoteWithPlayList(spThing);
     
 
