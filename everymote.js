@@ -232,11 +232,15 @@ var init = function(models, playlist) {
             }
         else if (e.data.playstate) {
             spThing.updatePlayStatus();
+
         }
 
     });
     _playlist.observe(models.EVENT.ITEMS_ADDED, function (e) {
         updateEverymoteWithPlayList(spThing);
+        if(!isPlaying()){
+            player.play(_playlist.get(0), _playlist, 0);
+        }
     });
 }
 
