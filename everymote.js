@@ -23,7 +23,7 @@ var getPlayList = function(calback){
 };
 
 var setupConnection = function(){
-    if(true){
+    if(false){
     var server = 'thing.everymote.com',
     port = '80';
     }else{
@@ -34,7 +34,7 @@ var setupConnection = function(){
     var connectThing = function(thing){
         console.log(thing);
         var socket = io.connect('http://' + server + ':' + port + '/thing',
-                {"force new connection":true 
+                {"force new connection":false 
                         ,'reconnect': true
                         ,'reconnection delay': 500
                         ,'max reconnection attempts': 10});
