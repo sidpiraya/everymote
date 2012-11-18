@@ -32,7 +32,7 @@ var setupConnection = function(){
     var connectThing = function(thing){
         console.log(thing);
         var socket = io.connect('http://' + server + ':' + port + '/thing',
-                {"force new connection":true 
+                {"force new connection":false 
                         ,'reconnect': true
                         ,'reconnection delay': 500
                         ,'max reconnection attempts': 10});
@@ -43,8 +43,10 @@ var setupConnection = function(){
                 socket.emit('setup', thing.settings);
                 thing.socket = socket;
                 updateEverymoteWithTrackDetails(spThing);
+
                 getPlayList(function(tracks){console.log("first GetPlayLis"); console.dir(tracks);spThing.socket.emit('updateActionControlerState', {"id":"2", "curentState":tracks});});
 
+              updateEverymoteWithPlayList(spThing);
         }).on('doAction', function (action) {
                 console.log(action.id);
                 thing.handleAction(action);
@@ -152,9 +154,8 @@ var updatePageWithTrackDetails = function() {
         } else {
         	var track = playerTrackInfo.data;
                 header.innerHTML = "<img src='"+track.album.cover +"' width='300'/ > " +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
+
       }
-
-
 }
 
 var removeLastPlayed = function(priviusTrack){
@@ -225,15 +226,19 @@ var init = function(models, playlist) {
             }
         else if (e.data.playstate) {
             spThing.updatePlayStatus();
+
         }
 
     });
     _playlist.observe(models.EVENT.ITEMS_ADDED, function (e) {
         updateEverymoteWithPlayList(spThing);
+        if(!isPlaying()){
+            player.play(_playlist.get(0), _playlist, 0);
+        }
     });
+
    // spThing.updateTrack();
     //updateEverymoteWithPlayList(spThing);
-    
 
 }
 
