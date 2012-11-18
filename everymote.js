@@ -23,7 +23,7 @@ var getPlayList = function(calback){
 };
 
 var setupConnection = function(){
-    if(false){
+    if(true){
     var server = 'thing.everymote.com',
     port = '80';
     }else{
@@ -44,6 +44,8 @@ var setupConnection = function(){
                 console.log('connected');
                 socket.emit('setup', thing.settings);
                 thing.socket = socket;
+                updateEverymoteWithTrackDetails(spThing);
+                updateEverymoteWithPlayList(spThing);
         }).on('doAction', function (action) {
                 console.log(action.id);
                 thing.handleAction(action);
@@ -151,8 +153,8 @@ var updatePageWithTrackDetails = function() {
         	header.innerText = "Nothing playing!";
         } else {
         	var track = playerTrackInfo.data;
-                header.innerHTML = "<img src='"+track.album.cover +"'/ > " +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
-      }
+                header.innerHTML = "<img src='"+track.album.cover +"' width='300'/ > " +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
+       }
 
 
 }
@@ -236,10 +238,6 @@ var init = function(models, playlist) {
     _playlist.observe(models.EVENT.ITEMS_ADDED, function (e) {
         updateEverymoteWithPlayList(spThing);
     });
-    spThing.updateTrack();
-    updateEverymoteWithPlayList(spThing);
-    
-
 }
 
 exports.init = init;
