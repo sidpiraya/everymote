@@ -153,7 +153,7 @@ var updatePageWithTrackDetails = function() {
         	header.innerText = "Nothing playing!";
         } else {
         	var track = playerTrackInfo.data;
-                header.innerHTML = "<img src='"+track.album.cover +"' width='300'/ > " +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
+                header.innerHTML = "<img src='"+track.album.cover +"' width='200'/ > <br />" +   track.name + " on the album " + track.album.name + " by " + track.album.artist.name + ".";
 
       }
 }

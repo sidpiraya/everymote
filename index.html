@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="sp://import/css/api.css">
     <link rel="stylesheet" href="sp://everymote/css/app.css">
     <style>
-           
             @import url('sp://import/css/list.css');
             @import url('sp://import/css/player.css');
             @import url('sp://import/css/ui.css');
@@ -18,8 +17,6 @@
     <script src="sp://everymote/js/jquery-1.7.min.js"></script>
 
     <script>
-
-
 
             $(document).ready(function() {
                 sp = getSpotifyApi(1);
@@ -61,10 +58,7 @@
                     tempPlaylist.add(tracks[Math.floor(Math.random()*tracks.length)]);
                 }
 
-
                 models.player.play(tempPlaylist.get(0), tempPlaylist, 0);
-
-
 
                 var playlist = new views.List(tempPlaylist);
             
@@ -81,7 +75,9 @@
 </head>
 <body>
     <div id="index" class="section">
-        <h1 id="header" class="now-playing">Hello, world!</h1>
+        <div id="branding"> <img src="everymote.png" style="margin: -15px 35px;"/></div>
+        <span id="header" class="now-playing"></span>
+        <br /><br />
         <div id="player"></div>
     </div>
     <div id="settings" class="section">
