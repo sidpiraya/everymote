@@ -24,11 +24,11 @@ var getPlayList = function(calback){
 
 var setupConnection = function(){
     if(false){
-    var server = 'thing.everymote.com',
-    port = '80';
+        var server = 'thing.everymote.com',
+        port = '80';
     }else{
-    var server = "localhost", 
-    port = '1338'; 
+        var server = "localhost", 
+        port = '1338'; 
     }
 
     var connectThing = function(thing){
