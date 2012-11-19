@@ -19,9 +19,9 @@ var getPlayList = function(calback){
     });
 };
 
-var setupConnection = function(){
+var setupConnection = function(runLocal){
 
-    if(true){
+    if(!runLocal){
         var server = 'thing.everymote.com',
         port = '80';
    }else{
@@ -206,12 +206,12 @@ var handleLinks = function () {
 }
 
 
-var init = function(models, playlist) {
+var init = function(models, playlist, runLocal) {
     var priviusTrack; 
     _models = models;
       console.log(_models.Link);
     player = models.player;
-    spThing = setupConnection();
+    spThing = setupConnection(runLocal);
     _playlist = playlist;
     updatePageWithTrackDetails(spThing);
     models.application.observe(models.EVENT.LINKSCHANGED, handleLinks);

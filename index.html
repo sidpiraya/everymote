@@ -36,8 +36,8 @@
  
                 tabs();
                 models.application.observe(models.EVENT.ARGUMENTSCHANGED, tabs);
-
-                everymote.init(models, tempPlaylist);
+                var runLocal = localStorage.getItem("local") === 'true';
+                everymote.init(models, tempPlaylist, runLocal);
 
                
                 var tracks = models.library.tracks;
@@ -70,7 +70,14 @@
                 });
 
                 $("#name").val(localStorage.getItem("name"));
+               
+                $("#local").attr('checked',runLocal); 
             });
+
+            var handleChange  = function handleChange(cb) {
+                localStorage.setItem('local', cb.checked);
+            };
+
         </script>
 </head>
 <body>
@@ -83,6 +90,7 @@
     <div id="settings" class="section">
         <h1>Settings</h1>
         <label>Name:</label> <input type="text" id="name"></input>
+        <label><input id="local" type='checkbox' style="-webkit-appearance:checkbox" onchange='handleChange(this);'/>local</label>
     </div>
 </body>
 </html>
