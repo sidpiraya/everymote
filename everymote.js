@@ -103,7 +103,7 @@ var getTrackInfo = function(){
     } else {
         var track = playerTrackInfo.data;
         var album = track.album;
-        return track.name + " by " + track.album.artist.name;         
+        return track.name.decodeForText() + " by " + track.album.artist.name.decodeForText();         
     }
 }
 

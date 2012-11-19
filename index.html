@@ -62,7 +62,7 @@
 
                 var playlist = new views.List(tempPlaylist);
             
-                $('#player').append(playlist.node);
+                setTimeout(function(){$('#player').append(playlist.node)}, 1000);
 
                 $("#name").focusout( function() {
                     localStorage.setItem('name', $(this).val());
